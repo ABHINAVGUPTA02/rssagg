@@ -7,7 +7,7 @@ import (
 )
 
 // This function will return the API KEY extracted from the header "Authorization": APIKEY {user api key}
-func getAPIKEY(header http.Header) (string, error) {
+func GetAPIKEY(header http.Header) (string, error) {
 	val := header.Get("Authorization")
 
 	if val == "" {
