@@ -54,9 +54,9 @@ func main() {
 
 	v1Router := chi.NewRouter()
 	v1Router.Get("/healthz", handlerReadiness)
-	v1Router.Get("/err", handler_err)
-	v1Router.Post("/users", apiCfg.handle_users)
-	
+	v1Router.Get("/err", handlerErr)
+	v1Router.Post("/users", apiCfg.handlerUsers)
+
 	router.Mount("/v1", v1Router)
 
 	srv := &http.Server{
