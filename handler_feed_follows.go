@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func (apiCfg *apiConfig) handlerUsers(w http.ResponseWriter, r *http.Request) {
+func (apiCfg *apiConfig) handlerFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
 	type parameters struct {
-		Name string `json:"name"`
+		FeedID uuid.UUID `json:"feed_id"`
 	}
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
@@ -22,19 +22,16 @@ func (apiCfg *apiConfig) handlerUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := apiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
+	feedFollows, err := apiCfg.DB.CreateFeedFollows(r.Context(), database.CreateFeedFollowsParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Name:      params.Name,
+		UserID:    user.ID,
+		FeedID:    params.FeedID,
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create user: %v", err))
+		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed follow: %v", err))
 		return
 	}
-	respondWithJSON(w, 201, databaseUserToUser(user))
-}
-
-func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
-	respondWithJSON(w, 200, databaseUserToUser(user))
+	respondWithJSON(w, 201, databaseFeedFollowsToFeedFollows(feedFollows))
 }

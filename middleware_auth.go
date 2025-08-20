@@ -14,13 +14,13 @@ func (apiCfg *apiConfig) middlewareAuth(handler authedHandler) http.HandlerFunc 
 	return func(w http.ResponseWriter, r *http.Request) {
 		key, err := auth.GetAPIKEY(r.Header)
 		if err != nil {
-			respondWithError(w, 403, fmt.Sprintf("Couldn't get API key: ", err))
+			respondWithError(w, 403, fmt.Sprintf("Couldn't get API key: %v", err))
 			return
 		}
 
 		user, err := apiCfg.DB.GetUserByAPIKey(r.Context(), key)
 		if err != nil {
-			respondWithError(w, 400, fmt.Sprintf("Couldn't get user: ", err))
+			respondWithError(w, 400, fmt.Sprintf("Couldn't get user: %v", err))
 			return
 		}
 

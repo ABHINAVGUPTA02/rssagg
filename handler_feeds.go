@@ -19,7 +19,7 @@ func (apiCfg *apiConfig) handlerFeeds(w http.ResponseWriter, r *http.Request, us
 	params := parameters{}
 	err := decoder.Decode(&params)
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Error passing JSON: ", err))
+		respondWithError(w, 400, fmt.Sprintf("Error passing JSON: %v", err))
 		return
 	}
 
@@ -32,7 +32,7 @@ func (apiCfg *apiConfig) handlerFeeds(w http.ResponseWriter, r *http.Request, us
 		UserID:    user.ID,
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed: ", err))
+		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed: %v", err))
 		return
 	}
 	respondWithJSON(w, 201, databaseFeedToFeed(feed))
@@ -41,7 +41,7 @@ func (apiCfg *apiConfig) handlerFeeds(w http.ResponseWriter, r *http.Request, us
 func (apiCfg *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
 	feeds, err := apiCfg.DB.GetFeeds(r.Context())
 	if err != nil {
-		respondWithError(w, 500, fmt.Sprintf("Couldn't get the feeds: ", err))
+		respondWithError(w, 500, fmt.Sprintf("Couldn't get the feeds: %v", err))
 	}
 	respondWithJSON(w, 200, databaseFeedsToUserFeeds(feeds))
 }
